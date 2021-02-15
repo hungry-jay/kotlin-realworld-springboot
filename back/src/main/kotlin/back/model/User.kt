@@ -1,9 +1,10 @@
 package back.model
 
 class User(val email: String,
-           val token: String,
+           var token: String = "",
            val username: String,
-           val bio: String,
-           val image: String) {
+           val password: String,
+           var bio: String = "",
+           var image: String = "") {
 
 }
