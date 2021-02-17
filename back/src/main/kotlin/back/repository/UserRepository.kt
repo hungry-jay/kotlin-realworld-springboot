@@ -14,4 +14,5 @@ interface UserRepository : CrudRepository<User, Long> {
 //    findOne()	ID로 조회
 //    save()	1건 또는 여러 건 저장 return 저장한것
 
+    fun findByEmail(email: String): User?
 }
