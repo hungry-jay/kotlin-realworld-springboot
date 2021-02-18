@@ -14,12 +14,8 @@ class UserHandler(private val repository: UserRepository, val service: UserServi
 
     @PostMapping("/api/users/login")
     fun authenticate( @RequestBody email: String, password: String): User {
-        try {
-            service.authLogin(email, password)
-            val user = repository.findByEmail(email)
-
-            user!!.token = service.getNewToken()
-            return user
+        return try {
+            service.login(email, password)
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
@@ -27,15 +23,9 @@ class UserHandler(private val repository: UserRepository, val service: UserServi
     }
 
     @PostMapping("/api/users")
-    fun register( @RequestBody userName: String, email: String, password: String): User {
-        try {
-            service.authRegister(email, password)
-            val user = User(email = email,
-                username = userName,
-                password = password)
-
-            user.token = service.getNewToken()
-            return repository.save(user)
+    fun register( @RequestBody username: String, email: String, password: String): User {
+        return try {
+            service.register(email, username, password)
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
@@ -47,9 +37,17 @@ class UserHandler(private val repository: UserRepository, val service: UserServi
 
 
     @PutMapping("/api/user")
-    fun updateUser( @RequestBody email: String, bio: String, image: String): User {
-        // bio, image update ??
-        TODO()
+    fun updateUser( @RequestBody email: String,
+                    username: String,
+                    password: String,
+                    bio: String,
+                    image: String): User {
+        return try {
+            service.update(email, username, password, bio, image)
+        } catch (e: Error) {
+            // error handler 따로 구현
+            throw e
+        }
     }
 
 }
