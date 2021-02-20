@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 class UserHandler(private val service: UserService) {
 
     @PostMapping("/api/users/login")
-    fun authenticate( @RequestBody login: Login): User {
+    fun authenticate( @RequestBody login: Login): Map<String, User> {
         return try {
-            service.login(login)
+            view(service.login(login))
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
@@ -25,9 +25,9 @@ class UserHandler(private val service: UserService) {
     }
 
     @PostMapping("/api/users")
-    fun register( @RequestBody register: Register): User {
+    fun register( @RequestBody register: Register): Map<String, User>  {
         return try {
-            service.register(register)
+            view(service.register(register))
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
@@ -39,13 +39,14 @@ class UserHandler(private val service: UserService) {
 
 
     @PutMapping("/api/user")
-    fun updateUser( @RequestBody user: UpdateUser): User {
+    fun updateUser( @RequestBody user: UpdateUser): Map<String, User>  {
         return try {
-            service.update(user)
+            view(service.update(user))
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
         }
     }
 
+    fun view(user: User) = mapOf("user" to user)
 }

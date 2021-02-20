@@ -1,6 +1,7 @@
 package back.handler
 
 import back.model.Profile
+import back.model.User
 import back.service.UserService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping
 class ProfileHandler(private val service: UserService) {
 
     @GetMapping("/api/profiles/{username}")
-    fun getProfile(@PathVariable userName: String): Profile {
+    fun getProfile(@PathVariable userName: String): Map<String, Profile> {
         service.findByUsername(userName)?.let {
-            return Profile.from(it, service.currentUser())
+            return view(it, service.currentUser())
         }
         throw Error("401 findByUsername error; user not found")
     }
@@ -26,4 +27,6 @@ class ProfileHandler(private val service: UserService) {
     fun unfollowUser(): Profile {
         TODO()
     }
+
+    fun view(user: User, currentUser: User) = mapOf("profile" to Profile.from(user, currentUser))
 }
