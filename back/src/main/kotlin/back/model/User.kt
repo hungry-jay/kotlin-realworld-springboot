@@ -8,6 +8,8 @@ data class User(val email: String,
            val username: String,
            val password: String,
            var bio: String = "",
-           var image: String = "") {
+           var image: String = "",
+           // 해당 user가 follow 하고있는 list
+           val follows: MutableList<String> = mutableListOf()) {
 
 }

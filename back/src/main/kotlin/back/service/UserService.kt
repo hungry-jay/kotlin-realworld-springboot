@@ -65,4 +65,6 @@ class UserService (val repository: UserRepository){
         return repository.save(updatedUser)
     }
 
+    fun findByUsername(username: String): User? = repository.findByUsername(username)
+
 }

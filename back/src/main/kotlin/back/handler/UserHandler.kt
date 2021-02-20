@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UserHandler( val service: UserService) {
+class UserHandler(private val service: UserService) {
 
     @PostMapping("/api/users/login")
     fun authenticate( @RequestBody login: Login): User {
