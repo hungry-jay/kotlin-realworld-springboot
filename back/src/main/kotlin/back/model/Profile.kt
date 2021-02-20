@@ -1,6 +1,6 @@
 package back.model
 
-class Profile(
+data class Profile(
     val username: String,
     val bio: String,
     val image: String,

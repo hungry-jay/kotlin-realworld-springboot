@@ -1,8 +1,8 @@
 package back.handler
 
-import back.model.DTO.Login
-import back.model.DTO.Register
-import back.model.DTO.UpdateUser
+import back.model.dto.Login
+import back.model.dto.Register
+import back.model.dto.UpdateUser
 import back.model.User
 import back.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
@@ -47,5 +47,5 @@ class UserHandler(private val service: UserService) {
         }
     }
 
-    fun view(user: User) = mapOf("user" to user)
+    private fun view(user: User) = mapOf("user" to user)
 }

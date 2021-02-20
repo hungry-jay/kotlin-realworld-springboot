@@ -19,14 +19,30 @@ class ProfileHandler(private val service: UserService) {
     }
 
     @PostMapping("/api/profiles/{username}/follow")
-    fun followUser(): Profile {
-        TODO()
+    fun followUser(@PathVariable username: String): Map<String, Profile> {
+        service.findByUsername(username)?.let {
+            val currentUser = service.currentUser()
+            if(!currentUser.follows.contains(username)){
+                currentUser.follows.add(username)
+                service.save(currentUser)
+            }
+            return view(it, currentUser)
+        }
+        throw Error("401 findByUsername error; user not found")
     }
 
     @DeleteMapping("/api/profiles/{username}/follow")
-    fun unfollowUser(): Profile {
-        TODO()
+    fun unfollowUser(@PathVariable username: String): Map<String, Profile> {
+        service.findByUsername(username)?.let {
+            val currentUser = service.currentUser()
+            if(currentUser.follows.contains(username)){
+                currentUser.follows.remove(username)
+                service.save(currentUser)
+            }
+            return view(it, currentUser)
+        }
+        throw Error("401 findByUsername error; user not found")
     }
 
-    fun view(user: User, currentUser: User) = mapOf("profile" to Profile.from(user, currentUser))
+    private fun view(user: User, currentUser: User) = mapOf("profile" to Profile.from(user, currentUser))
 }

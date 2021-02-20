@@ -1,4 +1,4 @@
-package back.model.DTO
+package back.model.dto
 
 import com.fasterxml.jackson.annotation.JsonRootName
 

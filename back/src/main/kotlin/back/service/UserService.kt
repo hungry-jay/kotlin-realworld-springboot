@@ -1,8 +1,8 @@
 package back.service
 
-import back.model.DTO.Login
-import back.model.DTO.Register
-import back.model.DTO.UpdateUser
+import back.model.dto.Login
+import back.model.dto.Register
+import back.model.dto.UpdateUser
 import back.model.User
 import back.repository.UserRepository
 import com.auth0.jwt.JWT
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(val repository: UserRepository) {
 
-    val currentUser = ThreadLocal<User>() // get set remove
+    private val currentUser = ThreadLocal<User>() // get set remove
 
     fun login(login: Login): User {
         repository.findByEmail(login.email)?.let {
@@ -72,4 +72,6 @@ class UserService(val repository: UserRepository) {
     }
 
     fun findByUsername(username: String): User? = repository.findByUsername(username)
+
+    fun save(user: User): User = repository.save(user)
 }
