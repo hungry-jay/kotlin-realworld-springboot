@@ -1,5 +1,8 @@
 package back.model
 
+import javax.persistence.Entity
+
+@Entity
 class Article(
     val slug: String,
     val title: String,
