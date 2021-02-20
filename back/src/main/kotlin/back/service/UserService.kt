@@ -2,15 +2,15 @@ package back.service
 
 import back.model.DTO.Login
 import back.model.DTO.Register
-import back.model.User
 import back.model.DTO.UpdateUser
+import back.model.User
 import back.repository.UserRepository
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.springframework.stereotype.Service
 
 @Service
-class UserService (val repository: UserRepository){
+class UserService(val repository: UserRepository) {
 
     val currentUser = ThreadLocal<User>() // get set remove
 
@@ -25,13 +25,15 @@ class UserService (val repository: UserRepository){
     }
 
     fun register(register: Register): User {
-        if(repository.existsByEmail(register.email))
+        if (repository.existsByEmail(register.email))
             throw Error("401 register error; duplicated email")
-        if(repository.existsByUsername(register.username))
+        if (repository.existsByUsername(register.username))
             throw Error("401 register error; duplicated username")
-        val user = User(email = register.email,
+        val user = User(
+            email = register.email,
             username = register.username,
-            password = register.password)
+            password = register.password
+        )
         user.token = getNewToken()
         return repository.save(user)
     }
@@ -45,26 +47,29 @@ class UserService (val repository: UserRepository){
     fun update(user: UpdateUser): User { // DTO를 통해 유연하게 in out
         val currentUser = currentUser()
 
-        if(user.email != null && currentUser.email != user.email
-            && repository.existsByEmail(user.email))
-                throw Error("401 update error; duplicated email")
+        if (user.email != null && currentUser.email != user.email &&
+            repository.existsByEmail(user.email)
+        )
+            throw Error("401 update error; duplicated email")
 
-        if(user.username != null && currentUser.username != user.username
-            && repository.existsByUsername(user.username))
+        if (user.username != null && currentUser.username != user.username &&
+            repository.existsByUsername(user.username)
+        )
             throw Error("401 update error; duplicated username")
 
-        val updatedUser = currentUser.copy(email = user.email ?: currentUser.email,
+        val updatedUser = currentUser.copy(
+            email = user.email ?: currentUser.email,
             username = user.username ?: currentUser.username,
             password = user.password ?: currentUser.password,
             bio = user.bio ?: currentUser.bio,
-            image = user.image ?: currentUser.image)
+            image = user.image ?: currentUser.image
+        )
 
-        if(user.password != null) // token 수정되어야 하는 경우
+        if (user.password != null) // token 수정되어야 하는 경우
             updatedUser.token = getNewToken()
 
         return repository.save(updatedUser)
     }
 
     fun findByUsername(username: String): User? = repository.findByUsername(username)
-
 }
