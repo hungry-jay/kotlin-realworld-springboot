@@ -1,6 +1,9 @@
 package back.service
 
+import back.model.DTO.Login
+import back.model.DTO.Register
 import back.model.User
+import back.model.DTO.UpdateUser
 import back.repository.UserRepository
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -11,9 +14,9 @@ class UserService (val repository: UserRepository){
 
     val currentUser = ThreadLocal<User>() // get set remove
 
-    fun login(email: String, password: String): User {
-        repository.findByEmail(email)?.let {
-            if (it.password !== password)
+    fun login(login: Login): User {
+        repository.findByEmail(login.email)?.let {
+            if (it.password !== login.password)
                 throw Error("401 login error; password failure")
             it.token = getNewToken()
             return repository.save(it)
@@ -21,14 +24,14 @@ class UserService (val repository: UserRepository){
         throw Error("401 login error; user not found")
     }
 
-    fun register(email: String, username: String, password: String): User {
-        if(repository.existsByEmail(email))
+    fun register(register: Register): User {
+        if(repository.existsByEmail(register.email))
             throw Error("401 register error; duplicated email")
-        if(repository.existsByUsername(username))
+        if(repository.existsByUsername(register.username))
             throw Error("401 register error; duplicated username")
-        val user = User(email = email,
-            username = username,
-            password = password)
+        val user = User(email = register.email,
+            username = register.username,
+            password = register.password)
         user.token = getNewToken()
         return repository.save(user)
     }
@@ -39,26 +42,24 @@ class UserService (val repository: UserRepository){
         .withIssuer("auth0")
         .sign(Algorithm.HMAC256(currentUser.get().password))
 
-    fun update(email: String?,
-               username: String?,
-               password: String?,
-               bio: String?,
-               image: String?): User { // DTO를 통해 유연하게 in out
+    fun update(user: UpdateUser): User { // DTO를 통해 유연하게 in out
         val currentUser = currentUser()
 
-        if(email != null && currentUser.email != email && repository.existsByEmail(email))
+        if(user.email != null && currentUser.email != user.email
+            && repository.existsByEmail(user.email))
                 throw Error("401 update error; duplicated email")
 
-        if(username != null && currentUser.username != username && repository.existsByUsername(username))
+        if(user.username != null && currentUser.username != user.username
+            && repository.existsByUsername(user.username))
             throw Error("401 update error; duplicated username")
 
-        val updatedUser = currentUser.copy(email = email ?: currentUser.email,
-            username = username ?: currentUser.username,
-            password = password ?: currentUser.password,
-            bio = bio ?: currentUser.bio,
-            image = image ?: currentUser.image)
+        val updatedUser = currentUser.copy(email = user.email ?: currentUser.email,
+            username = user.username ?: currentUser.username,
+            password = user.password ?: currentUser.password,
+            bio = user.bio ?: currentUser.bio,
+            image = user.image ?: currentUser.image)
 
-        if(password != null)
+        if(user.password != null) // token 수정되어야 하는 경우
             updatedUser.token = getNewToken()
 
         return repository.save(updatedUser)

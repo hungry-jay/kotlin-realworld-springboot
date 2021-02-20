@@ -1,7 +1,9 @@
 package back.handler
 
+import back.model.DTO.Login
+import back.model.DTO.Register
 import back.model.User
-import back.repository.UserRepository
+import back.model.DTO.UpdateUser
 import back.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UserHandler(private val repository: UserRepository, val service: UserService) {
+class UserHandler( val service: UserService) {
 
     @PostMapping("/api/users/login")
-    fun authenticate( @RequestBody email: String, password: String): User {
+    fun authenticate( @RequestBody login: Login): User {
         return try {
-            service.login(email, password)
+            service.login(login)
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
@@ -23,9 +25,9 @@ class UserHandler(private val repository: UserRepository, val service: UserServi
     }
 
     @PostMapping("/api/users")
-    fun register( @RequestBody username: String, email: String, password: String): User {
+    fun register( @RequestBody register: Register): User {
         return try {
-            service.register(email, username, password)
+            service.register(register)
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
@@ -37,13 +39,9 @@ class UserHandler(private val repository: UserRepository, val service: UserServi
 
 
     @PutMapping("/api/user")
-    fun updateUser( @RequestBody email: String,
-                    username: String,
-                    password: String,
-                    bio: String,
-                    image: String): User {
+    fun updateUser( @RequestBody user: UpdateUser): User {
         return try {
-            service.update(email, username, password, bio, image)
+            service.update(user)
         } catch (e: Error) {
             // error handler 따로 구현
             throw e
