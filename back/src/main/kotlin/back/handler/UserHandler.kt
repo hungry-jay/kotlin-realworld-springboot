@@ -35,7 +35,7 @@ class UserHandler(private val service: UserService) {
     }
 
     @GetMapping("/api/user")
-    fun getCurrentUser(): User = service.currentUser()
+    fun getCurrentUser(): Map<String, User> = view(service.currentUser())
 
     @PutMapping("/api/user")
     fun updateUser(@RequestBody user: UpdateUser): Map<String, User> {

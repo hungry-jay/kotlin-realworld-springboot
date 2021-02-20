@@ -1,16 +1,20 @@
 package back.handler
 
 import back.model.Article
+import back.model.dto.NewArticle
 import back.service.ArticleService
+import back.service.UserService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ArticleHandler (val service: ArticleService) {
+class ArticleHandler (val articleService: ArticleService,
+                      val userService: UserService) {
 
     @GetMapping("/api/articles")
     fun getArticles(): Any { // List<Article> + articlesCount
@@ -24,15 +28,17 @@ class ArticleHandler (val service: ArticleService) {
 
     @GetMapping("/api/articles/{slug}")
     fun getArticle(@PathVariable slug: String): Map<String, Article> {
-        service.findBySlug(slug)?.let {
+        articleService.findBySlug(slug)?.let {
             return articleView(it)
         }
         throw Error("401 findBySlug error; article not found")
     }
 
     @PostMapping("/api/articles")
-    fun createArticle(): Article {
-        TODO()
+    fun createArticle(@RequestBody newArticle: NewArticle): Article {
+        val currentUser = userService.currentUser()
+
+        return articleService.register(currentUser, newArticle)
     }
 
     @PutMapping("/api/articles/{slug}")
