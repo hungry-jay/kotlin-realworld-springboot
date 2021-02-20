@@ -1,5 +1,8 @@
 package back.model
 
+import javax.persistence.Entity
+
+@Entity
 class Comment(
     val id: Int,
     val createdAt: String,
