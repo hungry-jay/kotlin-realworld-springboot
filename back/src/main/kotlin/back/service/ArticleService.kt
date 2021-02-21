@@ -8,7 +8,7 @@ import com.github.slugify.Slugify
 import org.springframework.stereotype.Service
 
 @Service
-class ArticleService (private val repository: ArticleRepository) {
+class ArticleService(private val repository: ArticleRepository) {
     fun findBySlug(slug: String): Article? = repository.findBySlug(slug)
 
     fun register(currentUser: User, newArticle: NewArticle): Article {

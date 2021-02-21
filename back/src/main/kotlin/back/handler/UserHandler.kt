@@ -1,9 +1,9 @@
 package back.handler
 
+import back.model.User
 import back.model.dto.Login
 import back.model.dto.Register
 import back.model.dto.UpdateUser
-import back.model.User
 import back.service.UserService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

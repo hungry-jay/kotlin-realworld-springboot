@@ -24,7 +24,7 @@ class ProfileHandler(private val service: UserService) {
     fun followUser(@PathVariable username: String): Map<String, Profile> {
         service.findByUsername(username)?.let {
             val currentUser = service.currentUser()
-            if(!currentUser.follows.contains(username)){
+            if (!currentUser.follows.contains(username)) {
                 currentUser.follows.add(username)
                 service.save(currentUser)
             }
@@ -37,7 +37,7 @@ class ProfileHandler(private val service: UserService) {
     fun unfollowUser(@PathVariable username: String): Map<String, Profile> {
         service.findByUsername(username)?.let {
             val currentUser = service.currentUser()
-            if(currentUser.follows.contains(username)){
+            if (currentUser.follows.contains(username)) {
                 currentUser.follows.remove(username)
                 service.save(currentUser)
             }

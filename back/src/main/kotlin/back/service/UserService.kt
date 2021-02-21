@@ -1,9 +1,9 @@
 package back.service
 
+import back.model.User
 import back.model.dto.Login
 import back.model.dto.Register
 import back.model.dto.UpdateUser
-import back.model.User
 import back.repository.UserRepository
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

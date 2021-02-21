@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ArticleHandler (val articleService: ArticleService,
-                      val userService: UserService) {
+class ArticleHandler(
+    val articleService: ArticleService,
+    val userService: UserService
+) {
 
     @GetMapping("/api/articles")
     fun getArticles(): Any { // List<Article> + articlesCount
