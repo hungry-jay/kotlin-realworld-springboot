@@ -11,20 +11,15 @@ import org.springframework.stereotype.Service
 class ArticleService(private val repository: ArticleRepository) {
     fun findBySlug(slug: String): Article? = repository.findBySlug(slug)
 
-    fun register(currentUser: User, newArticle: NewArticle): Article {
-        val slug = getNewSlug(newArticle.title)
-
-        val article = Article(
+    fun register(currentUser: User, slug: String, newArticle: NewArticle): Article =
+        repository.save(Article(
             slug = slug,
             title = newArticle.title,
             description = newArticle.description,
             body = newArticle.body,
             tagList = newArticle.tagList,
             author = currentUser,
-        )
+        ))
 
-        return repository.save(article)
-    }
-
-    private fun getNewSlug(title: String): String = Slugify().slugify(title)
+    fun getNewSlug(title: String): String = Slugify().slugify(title)
 }

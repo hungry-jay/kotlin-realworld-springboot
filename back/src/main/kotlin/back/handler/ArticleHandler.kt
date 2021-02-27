@@ -37,11 +37,11 @@ class ArticleHandler(
     }
 
     @PostMapping("/api/articles")
-    fun createArticle(@RequestBody newArticle: NewArticle): Article {
-        val currentUser = userService.currentUser()
-
-        return articleService.register(currentUser, newArticle)
-    }
+    fun createArticle(@RequestBody newArticle: NewArticle): Map<String, Article> =
+        userService.currentUser().let {
+            val slug = articleService.getNewSlug(newArticle.title)
+            return articleView(articleService.register(it, slug, newArticle))
+        }
 
     @PutMapping("/api/articles/{slug}")
     fun updateArticle(): Article {
