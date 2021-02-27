@@ -17,6 +17,8 @@ class ArticleService(private val repository: ArticleRepository) {
         return articles.toList()
     }
 
+    fun findByAuthor(author: User) = repository.findByAuthor(author)
+
     fun findBySlug(slug: String): Article? = repository.findBySlug(slug)
 
     fun register(currentUser: User, slug: String, newArticle: NewArticle): Article =

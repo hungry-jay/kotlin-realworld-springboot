@@ -27,8 +27,15 @@ class ArticleHandler(
     }
 
     @GetMapping("/api/articles/feed")
-    fun feedArticles(): Any { // List<Article> + articlesCount
-        TODO()
+    fun feedArticles(): Any {
+        val currentUser = userService.currentUser()
+
+        val articles = currentUser.follows.map { it ->
+            val user = userService.findByUsername(it) ?: throw Error("401 findUser error; user not found")
+            articleService.findByAuthor(user) ?: throw Error("401 findArticle error; article not found")
+        }
+
+        return articlesView(articles)
     }
 
     @GetMapping("/api/articles/{slug}")
