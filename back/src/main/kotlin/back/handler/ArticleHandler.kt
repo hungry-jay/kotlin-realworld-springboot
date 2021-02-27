@@ -19,8 +19,11 @@ class ArticleHandler(
 ) {
 
     @GetMapping("/api/articles")
-    fun getArticles(): Any { // List<Article> + articlesCount
-        TODO()
+    fun getArticles(): Map<String, List<Article>> {
+        articleService.findAll()?.let {
+            return articlesView(it)
+        }
+        throw Error("401 findAll error; articles not found")
     }
 
     @GetMapping("/api/articles/feed")
@@ -72,5 +75,5 @@ class ArticleHandler(
 
     fun articleView(article: Article) = mapOf("article" to article)
 
-    fun articlesView(articles: List<Article>) = mapOf("article" to articles)
+    fun articlesView(articles: List<Article>) = mapOf("articles" to articles)
 }
