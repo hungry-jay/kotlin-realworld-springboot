@@ -49,8 +49,15 @@ class ArticleHandler(
     }
 
     @DeleteMapping("/api/articles/{slug}")
-    fun deleteArticle(): Void {
-        TODO()
+    fun deleteArticle(@PathVariable slug: String): Void {
+        val currentUser = userService.currentUser()
+        articleService.findBySlug(slug)?.let {
+            if(it.author != currentUser)
+                throw Error("auth error")
+
+            articleService.delete(slug = slug)
+        }
+        throw Error("401 findBySlug error; article not found")
     }
 
     @PostMapping("/api/articles/{slug}/favorite")

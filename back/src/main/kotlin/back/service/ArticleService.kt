@@ -22,4 +22,9 @@ class ArticleService(private val repository: ArticleRepository) {
         ))
 
     fun getNewSlug(title: String): String = Slugify().slugify(title)
+
+    fun delete(slug: String) =
+        repository.findBySlug(slug)?.let {
+            repository.delete(it)
+        }
 }
