@@ -97,7 +97,7 @@ class ArticleService(private val repository: ArticleRepository) {
     }
 
     fun getTags(): List<String> {
-        val tags : MutableList<String> = mutableListOf()
+        val tags: MutableList<String> = mutableListOf()
         repository.findAll().map { it ->
             it.tagList.map {
                 tags.add(it)
