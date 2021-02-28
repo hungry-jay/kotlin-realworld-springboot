@@ -58,4 +58,18 @@ class ArticleService(private val repository: ArticleRepository) {
         repository.findBySlug(slug)?.let {
             repository.delete(it)
         }
+
+    fun addFavored(article: Article, currentUser: User): Article {
+        if(!article.favored.contains(currentUser)) {
+            article.favored.add(currentUser)
+        }
+        return repository.save(article)
+    }
+
+    fun deleteFavored(article: Article, currentUser: User): Article {
+        if(article.favored.contains(currentUser)) {
+            article.favored.remove(currentUser)
+        }
+        return repository.save(article)
+    }
 }

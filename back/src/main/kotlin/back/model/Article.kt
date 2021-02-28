@@ -12,6 +12,6 @@ data class Article(
     val tagList: MutableList<String> = mutableListOf(),
     val createdAt: ZonedDateTime = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
-    var favoritesCount: Int = 0,
+    val favored: MutableList<User> = mutableListOf(),
     val author: User
 )

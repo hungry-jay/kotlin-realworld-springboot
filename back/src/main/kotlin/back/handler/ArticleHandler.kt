@@ -98,13 +98,29 @@ class ArticleHandler(
     }
 
     @PostMapping("/api/articles/{slug}/favorite")
-    fun favoriteArticle(): Article {
-        TODO()
+    fun favoriteArticle(@PathVariable slug: String): Map<String, Article> {
+        articleService.findBySlug(slug)?. let{
+            val article = articleService.addFavored(
+                article = it,
+                currentUser = userService.currentUser()
+            )
+
+            return articleView(article)
+        }
+        throw Error("401 findBySlug error; article not found")
     }
 
     @DeleteMapping("/api/articles/{slug}/favorite")
-    fun unfavoriteArticle(): Article {
-        TODO()
+    fun unfavoriteArticle(@PathVariable slug: String): Map<String, Article> {
+        articleService.findBySlug(slug)?. let{
+            val article = articleService.deleteFavored(
+                article = it,
+                currentUser = userService.currentUser()
+            )
+
+            return articleView(article)
+        }
+        throw Error("401 findBySlug error; article not found")
     }
 
     fun articleView(article: Article) = mapOf("article" to article)
