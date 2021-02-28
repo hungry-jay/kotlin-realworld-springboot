@@ -2,6 +2,7 @@ package back.handler
 
 import back.model.Article
 import back.model.dto.NewArticle
+import back.model.dto.UpdateArticle
 import back.service.ArticleService
 import back.service.UserService
 import org.springframework.data.domain.PageRequest
@@ -71,8 +72,15 @@ class ArticleHandler(
         }
 
     @PutMapping("/api/articles/{slug}")
-    fun updateArticle(): Article {
-        TODO()
+    fun updateArticle(
+        @PathVariable slug: String,
+        @RequestBody updateArticle: UpdateArticle
+    ): Map<String, Article> {
+        articleService.findBySlug(slug)?.let {
+            val updatedArticle = articleService.update(it, updateArticle)
+            return articleView(updatedArticle)
+        }
+        throw Error("401 findBySlug error; article not found")
     }
 
     @DeleteMapping("/api/articles/{slug}")

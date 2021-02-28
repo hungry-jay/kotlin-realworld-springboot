@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 import javax.persistence.Entity
 
 @Entity
-class Article(
+data class Article(
     val slug: String,
     val title: String,
     val description: String,

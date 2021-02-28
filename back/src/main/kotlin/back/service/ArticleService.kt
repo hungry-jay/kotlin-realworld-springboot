@@ -3,10 +3,12 @@ package back.service
 import back.model.Article
 import back.model.User
 import back.model.dto.NewArticle
+import back.model.dto.UpdateArticle
 import back.repository.ArticleRepository
 import com.github.slugify.Slugify
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
 
 @Service
 class ArticleService(private val repository: ArticleRepository) {
@@ -35,6 +37,22 @@ class ArticleService(private val repository: ArticleRepository) {
         )
 
     fun getNewSlug(title: String): String = Slugify().slugify(title)
+
+    fun update(currentArticle: Article, updateArticle: UpdateArticle): Article {
+        if (updateArticle.title != null && currentArticle.title != updateArticle.title) {
+            val newSlug = getNewSlug(updateArticle.title)
+        }
+
+        val updatedArticle = currentArticle.copy(
+            title = updateArticle.title ?: currentArticle.title,
+            description = updateArticle.description ?: currentArticle.description,
+            body = updateArticle.body ?: currentArticle.body,
+            slug = updateArticle.slug ?: currentArticle.slug,
+            updatedAt = ZonedDateTime.now()
+        )
+
+        return repository.save(updatedArticle)
+    }
 
     fun delete(slug: String) =
         repository.findBySlug(slug)?.let {
