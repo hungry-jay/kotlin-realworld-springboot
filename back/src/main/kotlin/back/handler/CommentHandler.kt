@@ -32,8 +32,11 @@ class CommentHandler (
     }
 
     @GetMapping("/api/articles/{slug}/comments")
-    fun getComments(): List<Comment> {
-        TODO()
+    fun getComments(@PathVariable slug: String): Map<String, List<Comment>> {
+        articleService.findBySlug(slug)?.let {
+            return commentsView(articleService.getComments(it))
+        }
+        throw Error("401 findBySlug error; article not found")
     }
 
     @DeleteMapping("/api/articles/{slug}/comments/{id}")

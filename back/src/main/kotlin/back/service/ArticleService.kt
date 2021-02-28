@@ -87,4 +87,6 @@ class ArticleService(private val repository: ArticleRepository) {
         repository.save(article)
         return comment
     }
+
+    fun getComments(article: Article): List<Comment> = article.comments.toList()
 }
