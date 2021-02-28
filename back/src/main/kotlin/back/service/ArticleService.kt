@@ -62,14 +62,14 @@ class ArticleService(private val repository: ArticleRepository) {
         }
 
     fun addFavored(article: Article, currentUser: User): Article {
-        if(!article.favored.contains(currentUser)) {
+        if (!article.favored.contains(currentUser)) {
             article.favored.add(currentUser)
         }
         return repository.save(article)
     }
 
     fun deleteFavored(article: Article, currentUser: User): Article {
-        if(article.favored.contains(currentUser)) {
+        if (article.favored.contains(currentUser)) {
             article.favored.remove(currentUser)
         }
         return repository.save(article)
@@ -82,7 +82,8 @@ class ArticleService(private val repository: ArticleRepository) {
     ): Comment {
         val comment = Comment(
             body = newComment.body,
-            author = currentUser)
+            author = currentUser
+        )
         article.comments.add(comment)
         repository.save(article)
         return comment

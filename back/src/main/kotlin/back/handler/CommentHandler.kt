@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CommentHandler (
+class CommentHandler(
     val articleService: ArticleService,
-    val userService: UserService){
+    val userService: UserService
+) {
 
     @PostMapping("/api/articles/{slug}/comments")
     fun addComment(
@@ -25,7 +26,8 @@ class CommentHandler (
             val comment = articleService.registerComment(
                 article = it,
                 newComment = newComment,
-                currentUser = userService.currentUser())
+                currentUser = userService.currentUser()
+            )
             return commentView(comment)
         }
         throw Error("401 findBySlug error; article not found")

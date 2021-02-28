@@ -99,7 +99,7 @@ class ArticleHandler(
 
     @PostMapping("/api/articles/{slug}/favorite")
     fun favoriteArticle(@PathVariable slug: String): Map<String, Article> {
-        articleService.findBySlug(slug)?. let{
+        articleService.findBySlug(slug)?. let {
             val article = articleService.addFavored(
                 article = it,
                 currentUser = userService.currentUser()
@@ -112,7 +112,7 @@ class ArticleHandler(
 
     @DeleteMapping("/api/articles/{slug}/favorite")
     fun unfavoriteArticle(@PathVariable slug: String): Map<String, Article> {
-        articleService.findBySlug(slug)?. let{
+        articleService.findBySlug(slug)?. let {
             val article = articleService.deleteFavored(
                 article = it,
                 currentUser = userService.currentUser()

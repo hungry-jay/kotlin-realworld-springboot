@@ -16,5 +16,5 @@ data class Article(
     val favored: MutableList<User> = mutableListOf(),
     val author: User,
     @JsonIgnore
-    val comments : MutableList<Comment> = mutableListOf()
+    val comments: MutableList<Comment> = mutableListOf()
 )
