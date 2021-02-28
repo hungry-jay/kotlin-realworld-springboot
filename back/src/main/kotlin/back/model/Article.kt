@@ -1,5 +1,6 @@
 package back.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.ZonedDateTime
 import javax.persistence.Entity
 
@@ -13,5 +14,7 @@ data class Article(
     val createdAt: ZonedDateTime = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
     val favored: MutableList<User> = mutableListOf(),
-    val author: User
+    val author: User,
+    @JsonIgnore
+    val comments : MutableList<Comment> = mutableListOf()
 )

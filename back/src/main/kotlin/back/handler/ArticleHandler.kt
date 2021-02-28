@@ -68,7 +68,7 @@ class ArticleHandler(
     fun createArticle(@RequestBody newArticle: NewArticle): Map<String, Article> =
         userService.currentUser().let {
             val slug = articleService.getNewSlug(newArticle.title)
-            return articleView(articleService.register(it, slug, newArticle))
+            return articleView(articleService.registerArticle(it, slug, newArticle))
         }
 
     @PutMapping("/api/articles/{slug}")
@@ -123,7 +123,7 @@ class ArticleHandler(
         throw Error("401 findBySlug error; article not found")
     }
 
-    fun articleView(article: Article) = mapOf("article" to article)
+    private fun articleView(article: Article) = mapOf("article" to article)
 
-    fun articlesView(articles: List<Article>) = mapOf("articles" to articles)
+    private fun articlesView(articles: List<Article>) = mapOf("articles" to articles)
 }

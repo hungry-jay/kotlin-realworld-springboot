@@ -1,8 +1,10 @@
 package back.service
 
 import back.model.Article
+import back.model.Comment
 import back.model.User
 import back.model.dto.NewArticle
+import back.model.dto.NewComment
 import back.model.dto.UpdateArticle
 import back.repository.ArticleRepository
 import com.github.slugify.Slugify
@@ -24,7 +26,7 @@ class ArticleService(private val repository: ArticleRepository) {
 
     fun findBySlug(slug: String): Article? = repository.findBySlug(slug)
 
-    fun register(currentUser: User, slug: String, newArticle: NewArticle): Article =
+    fun registerArticle(currentUser: User, slug: String, newArticle: NewArticle): Article =
         repository.save(
             Article(
                 slug = slug,
@@ -71,5 +73,18 @@ class ArticleService(private val repository: ArticleRepository) {
             article.favored.remove(currentUser)
         }
         return repository.save(article)
+    }
+
+    fun registerComment(
+        article: Article,
+        newComment: NewComment,
+        currentUser: User
+    ): Comment {
+        val comment = Comment(
+            body = newComment.body,
+            author = currentUser)
+        article.comments.add(comment)
+        repository.save(article)
+        return comment
     }
 }
