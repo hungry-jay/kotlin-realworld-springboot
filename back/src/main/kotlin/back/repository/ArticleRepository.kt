@@ -11,4 +11,5 @@ interface ArticleRepository : CrudRepository<Article, Long> {
     fun findBySlug(slug: String): Article?
     fun findByAuthor(author: User, pageRequest: PageRequest): Article?
     fun findAll(pageRequest: PageRequest): Iterable<Article>
+    override fun findAll(): Iterable<Article>
 }

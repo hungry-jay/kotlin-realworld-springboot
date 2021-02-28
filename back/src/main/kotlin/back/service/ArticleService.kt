@@ -95,4 +95,14 @@ class ArticleService(private val repository: ArticleRepository) {
         article.comments.removeIf { it.id == id }
         repository.save(article)
     }
+
+    fun getTags(): List<String> {
+        val tags : MutableList<String> = mutableListOf()
+        repository.findAll().map { it ->
+            it.tagList.map {
+                tags.add(it)
+            }
+        }
+        return tags.toList()
+    }
 }
