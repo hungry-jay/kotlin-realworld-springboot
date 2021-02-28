@@ -22,11 +22,13 @@ class ArticleHandler(
 ) {
 
     @GetMapping("/api/articles")
-    fun getArticles(@RequestParam tag: String,
-                    @RequestParam author: String,
-                    @RequestParam favorited: String,
-                    @RequestParam(defaultValue = "20") limit: Int,
-                    @RequestParam(defaultValue = "0") offset: Int): Map<String, List<Article>> {
+    fun getArticles(
+        @RequestParam tag: String,
+        @RequestParam author: String,
+        @RequestParam favorited: String,
+        @RequestParam(defaultValue = "20") limit: Int,
+        @RequestParam(defaultValue = "0") offset: Int
+    ): Map<String, List<Article>> {
 
         val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
 
@@ -37,8 +39,10 @@ class ArticleHandler(
     }
 
     @GetMapping("/api/articles/feed")
-    fun feedArticles(@RequestParam(defaultValue = "20") limit: Int,
-                     @RequestParam(defaultValue = "0") offset: Int): Map<String, List<Article>> {
+    fun feedArticles(
+        @RequestParam(defaultValue = "20") limit: Int,
+        @RequestParam(defaultValue = "0") offset: Int
+    ): Map<String, List<Article>> {
         val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
 
         val currentUser = userService.currentUser()
@@ -75,7 +79,7 @@ class ArticleHandler(
     fun deleteArticle(@PathVariable slug: String): Void {
         val currentUser = userService.currentUser()
         articleService.findBySlug(slug)?.let {
-            if(it.author != currentUser)
+            if (it.author != currentUser)
                 throw Error("auth error")
 
             articleService.delete(slug = slug)
