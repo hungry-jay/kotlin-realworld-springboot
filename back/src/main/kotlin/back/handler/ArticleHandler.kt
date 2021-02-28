@@ -77,6 +77,9 @@ class ArticleHandler(
         @RequestBody updateArticle: UpdateArticle
     ): Map<String, Article> {
         articleService.findBySlug(slug)?.let {
+            if (it.author != userService.currentUser())
+                throw Error("auth error")
+
             val updatedArticle = articleService.update(it, updateArticle)
             return articleView(updatedArticle)
         }
@@ -85,9 +88,8 @@ class ArticleHandler(
 
     @DeleteMapping("/api/articles/{slug}")
     fun deleteArticle(@PathVariable slug: String): Void {
-        val currentUser = userService.currentUser()
         articleService.findBySlug(slug)?.let {
-            if (it.author != currentUser)
+            if (it.author != userService.currentUser())
                 throw Error("auth error")
 
             articleService.delete(slug = slug)
