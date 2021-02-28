@@ -1,0 +1,9 @@
+
+1. article과 comment는 종속적이어야 한다? + article과 tag는 종속적이지 않을 것 같다. -> repository 분리
+
+2. error 부분 추가 예정
+
+3. article 정렬부분 구현 예정
+    3.1. 이 때 inout도 고려, specification 추가.
+
+4. Test code
