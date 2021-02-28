@@ -89,4 +89,9 @@ class ArticleService(private val repository: ArticleRepository) {
     }
 
     fun getComments(article: Article): List<Comment> = article.comments.toList()
+
+    fun deleteComment(article: Article, id: Long) {
+        article.comments.removeIf { it.id == id }
+        repository.save(article)
+    }
 }

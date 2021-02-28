@@ -9,7 +9,7 @@ import javax.persistence.Id
 @Entity
 class Comment(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int = 0,
+    val id: Long = 0,
     val createdAt: ZonedDateTime = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
     val body: String = "",

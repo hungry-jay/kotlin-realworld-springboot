@@ -40,8 +40,14 @@ class CommentHandler (
     }
 
     @DeleteMapping("/api/articles/{slug}/comments/{id}")
-    fun deleteComment(): Void {
-        TODO()
+    fun deleteComment(
+        @PathVariable slug: String,
+        @PathVariable id: Long
+    ): Void {
+        articleService.findBySlug(slug)?.let {
+            articleService.deleteComment(it, id)
+        }
+        throw Error("401 findBySlug error; article not found")
     }
 
     private fun commentView(comment: Comment) = mapOf("comment" to comment)
