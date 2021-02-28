@@ -4,12 +4,15 @@ import back.model.Article
 import back.model.dto.NewArticle
 import back.service.ArticleService
 import back.service.UserService
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -19,20 +22,30 @@ class ArticleHandler(
 ) {
 
     @GetMapping("/api/articles")
-    fun getArticles(): Map<String, List<Article>> {
-        articleService.findAll()?.let {
+    fun getArticles(@RequestParam tag: String,
+                    @RequestParam author: String,
+                    @RequestParam favorited: String,
+                    @RequestParam(defaultValue = "20") limit: Int,
+                    @RequestParam(defaultValue = "0") offset: Int): Map<String, List<Article>> {
+
+        val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
+
+        articleService.findAll(page)?.let {
             return articlesView(it)
         }
         throw Error("401 findAll error; articles not found")
     }
 
     @GetMapping("/api/articles/feed")
-    fun feedArticles(): Any {
+    fun feedArticles(@RequestParam(defaultValue = "20") limit: Int,
+                     @RequestParam(defaultValue = "0") offset: Int): Map<String, List<Article>> {
+        val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
+
         val currentUser = userService.currentUser()
 
         val articles = currentUser.follows.map { it ->
             val user = userService.findByUsername(it) ?: throw Error("401 findUser error; user not found")
-            articleService.findByAuthor(user) ?: throw Error("401 findArticle error; article not found")
+            articleService.findByAuthor(user, page) ?: throw Error("401 findArticle error; article not found")
         }
 
         return articlesView(articles)

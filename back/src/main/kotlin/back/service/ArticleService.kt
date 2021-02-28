@@ -5,19 +5,20 @@ import back.model.User
 import back.model.dto.NewArticle
 import back.repository.ArticleRepository
 import com.github.slugify.Slugify
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
 class ArticleService(private val repository: ArticleRepository) {
-    fun findAll(): List<Article>? {
+    fun findAll(page: PageRequest): List<Article>? {
         val articles : MutableList<Article> = mutableListOf()
-        repository.findAll().map {
+        repository.findAll(page).map {
             articles.add(it)
         }
         return articles.toList()
     }
 
-    fun findByAuthor(author: User) = repository.findByAuthor(author)
+    fun findByAuthor(author: User, page: PageRequest) = repository.findByAuthor(author, page)
 
     fun findBySlug(slug: String): Article? = repository.findBySlug(slug)
 
