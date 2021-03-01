@@ -30,7 +30,6 @@ class ArticleHandler(
         @RequestParam(defaultValue = "20") limit: Int,
         @RequestParam(defaultValue = "0") offset: Int
     ): Map<String, List<Article>> {
-
         val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
 
         articleService.findAll(page)?.let {

@@ -14,13 +14,7 @@ import java.time.ZonedDateTime
 
 @Service
 class ArticleService(private val repository: ArticleRepository) {
-    fun findAll(page: PageRequest): List<Article>? {
-        val articles: MutableList<Article> = mutableListOf()
-        repository.findAll(page).map {
-            articles.add(it)
-        }
-        return articles.toList()
-    }
+    fun findAll(page: PageRequest): List<Article>? = repository.findAll(page).toList()
 
     fun findByAuthor(author: User, page: PageRequest) = repository.findByAuthor(author, page)
 
