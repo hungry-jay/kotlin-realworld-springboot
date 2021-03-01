@@ -11,7 +11,7 @@ data class Article(
     val title: String,
     val description: String,
     val body: String,
-    val tagList: MutableList<String> = mutableListOf(),
+    val tagList: MutableList<Tag> = mutableListOf(),
     val createdAt: ZonedDateTime = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
     val favored: MutableList<User> = mutableListOf(),

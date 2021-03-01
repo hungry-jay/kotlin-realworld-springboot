@@ -5,4 +5,5 @@ import back.repository.TagRepository
 
 class TagService(private val repository: TagRepository) {
     fun getTags(): List<Tag> = repository.findAll().toList()
+    fun registerTag(tagList: MutableList<Tag>) = tagList.map { repository.save(it) }
 }

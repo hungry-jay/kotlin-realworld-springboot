@@ -1,5 +1,6 @@
 package back.model.dto
 
+import back.model.Tag
 import back.model.User
 import com.fasterxml.jackson.annotation.JsonRootName
 import java.time.ZonedDateTime
@@ -10,7 +11,7 @@ data class Article(
     val title: String,
     val description: String,
     val body: String,
-    val tagList: MutableList<String> = mutableListOf(),
+    val tagList: MutableList<Tag> = mutableListOf(),
     val createdAt: ZonedDateTime = ZonedDateTime.now(),
     val updatedAt: ZonedDateTime = ZonedDateTime.now(),
     val favorited: Boolean = false,

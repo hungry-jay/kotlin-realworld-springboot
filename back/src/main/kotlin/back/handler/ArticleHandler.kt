@@ -4,6 +4,7 @@ import back.model.Article
 import back.model.dto.NewArticle
 import back.model.dto.UpdateArticle
 import back.service.ArticleService
+import back.service.TagService
 import back.service.UserService
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class ArticleHandler(
     val articleService: ArticleService,
-    val userService: UserService
+    val userService: UserService,
+    val tagService: TagService
 ) {
 
     @GetMapping("/api/articles")
@@ -67,6 +69,7 @@ class ArticleHandler(
     fun createArticle(@RequestBody newArticle: NewArticle): Map<String, back.model.dto.Article> =
         userService.currentUser().let {
             val slug = articleService.getNewSlug(newArticle.title)
+            tagService.registerTag(newArticle.tagList)
             return articleView(articleService.registerArticle(it, slug, newArticle))
         }
 
