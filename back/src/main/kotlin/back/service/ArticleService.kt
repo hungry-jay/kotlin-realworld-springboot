@@ -35,15 +35,16 @@ class ArticleService(private val repository: ArticleRepository) {
     fun getNewSlug(title: String): String = Slugify().slugify(title)
 
     fun update(currentArticle: Article, updateArticle: UpdateArticle): Article {
+        var newSlug: String? = null
         if (updateArticle.title != null && currentArticle.title != updateArticle.title) {
-            val newSlug = getNewSlug(updateArticle.title)
+            newSlug = getNewSlug(updateArticle.title)
         }
 
         val updatedArticle = currentArticle.copy(
             title = updateArticle.title ?: currentArticle.title,
             description = updateArticle.description ?: currentArticle.description,
             body = updateArticle.body ?: currentArticle.body,
-            slug = updateArticle.slug ?: currentArticle.slug,
+            slug = newSlug ?: currentArticle.slug,
             updatedAt = ZonedDateTime.now()
         )
 
