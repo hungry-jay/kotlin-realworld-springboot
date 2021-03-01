@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(val repository: UserRepository) {
 
-    private val currentUser = ThreadLocal<User>() // get set remove
+    private val currentUser = ThreadLocal<User>()
 
     fun login(login: Login): User {
         repository.findByEmail(login.email)?.let {
@@ -44,7 +44,7 @@ class UserService(val repository: UserRepository) {
         .withIssuer("auth0")
         .sign(Algorithm.HMAC256(currentUser.get().password))
 
-    fun update(user: UpdateUser): User { // DTO를 통해 유연하게 in out
+    fun update(user: UpdateUser): User {
         val currentUser = currentUser()
 
         if (user.email != null && currentUser.email != user.email &&
@@ -65,7 +65,7 @@ class UserService(val repository: UserRepository) {
             image = user.image ?: currentUser.image
         )
 
-        if (user.password != null) // token 수정되어야 하는 경우
+        if (user.password != null)
             updatedUser.token = getNewToken()
 
         return repository.save(updatedUser)

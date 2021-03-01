@@ -12,7 +12,6 @@ data class User(
     val password: String,
     var bio: String = "",
     var image: String = "",
-    // 해당 user가 follow 하고있는 list
     @JsonIgnore
     val follows: MutableList<String> = mutableListOf()
 )
