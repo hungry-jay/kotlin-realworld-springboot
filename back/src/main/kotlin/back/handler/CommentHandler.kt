@@ -1,6 +1,6 @@
 package back.handler
 
-import back.model.Comment
+import back.model.dto.Comment
 import back.model.dto.NewComment
 import back.service.ArticleService
 import back.service.UserService

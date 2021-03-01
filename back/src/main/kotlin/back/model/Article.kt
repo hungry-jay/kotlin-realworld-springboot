@@ -1,5 +1,6 @@
 package back.model
 
+import back.model.dto.Comment
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.ZonedDateTime
 import javax.persistence.Entity

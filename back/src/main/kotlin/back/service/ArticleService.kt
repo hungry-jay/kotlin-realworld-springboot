@@ -1,7 +1,7 @@
 package back.service
 
 import back.model.Article
-import back.model.Comment
+import back.model.dto.Comment
 import back.model.User
 import back.model.dto.NewArticle
 import back.model.dto.NewComment
