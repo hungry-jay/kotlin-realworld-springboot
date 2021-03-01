@@ -29,7 +29,7 @@ class ArticleHandler(
         @RequestParam favorited: String,
         @RequestParam(defaultValue = "20") limit: Int,
         @RequestParam(defaultValue = "0") offset: Int
-    ): Map<String, List<Article>> {
+    ): Map<String, Any> {
         val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
 
         articleService.findAll(page)?.let {
@@ -42,7 +42,7 @@ class ArticleHandler(
     fun feedArticles(
         @RequestParam(defaultValue = "20") limit: Int,
         @RequestParam(defaultValue = "0") offset: Int
-    ): Map<String, List<Article>> {
+    ): Map<String, Any> {
         val page = PageRequest.of(offset, limit, Sort.Direction.DESC, "createdAt")
 
         val currentUser = userService.currentUser()
@@ -56,7 +56,7 @@ class ArticleHandler(
     }
 
     @GetMapping("/api/articles/{slug}")
-    fun getArticle(@PathVariable slug: String): Map<String, Article> {
+    fun getArticle(@PathVariable slug: String): Map<String, back.model.dto.Article> {
         articleService.findBySlug(slug)?.let {
             return articleView(it)
         }
@@ -64,7 +64,7 @@ class ArticleHandler(
     }
 
     @PostMapping("/api/articles")
-    fun createArticle(@RequestBody newArticle: NewArticle): Map<String, Article> =
+    fun createArticle(@RequestBody newArticle: NewArticle): Map<String, back.model.dto.Article> =
         userService.currentUser().let {
             val slug = articleService.getNewSlug(newArticle.title)
             return articleView(articleService.registerArticle(it, slug, newArticle))
@@ -74,7 +74,7 @@ class ArticleHandler(
     fun updateArticle(
         @PathVariable slug: String,
         @RequestBody updateArticle: UpdateArticle
-    ): Map<String, Article> {
+    ): Map<String, back.model.dto.Article> {
         articleService.findBySlug(slug)?.let {
             if (it.author != userService.currentUser())
                 throw Error("auth error")
@@ -97,7 +97,7 @@ class ArticleHandler(
     }
 
     @PostMapping("/api/articles/{slug}/favorite")
-    fun favoriteArticle(@PathVariable slug: String): Map<String, Article> {
+    fun favoriteArticle(@PathVariable slug: String): Map<String, back.model.dto.Article> {
         articleService.findBySlug(slug)?. let {
             val article = articleService.addFavored(
                 article = it,
@@ -110,7 +110,7 @@ class ArticleHandler(
     }
 
     @DeleteMapping("/api/articles/{slug}/favorite")
-    fun unfavoriteArticle(@PathVariable slug: String): Map<String, Article> {
+    fun unfavoriteArticle(@PathVariable slug: String): Map<String, back.model.dto.Article> {
         articleService.findBySlug(slug)?. let {
             val article = articleService.deleteFavored(
                 article = it,
@@ -122,7 +122,12 @@ class ArticleHandler(
         throw Error("401 findBySlug error; article not found")
     }
 
-    private fun articleView(article: Article) = mapOf("article" to article)
+    private fun articleView(article: Article) =
+        mapOf("article" to back.model.dto.Article.from(article, userService.currentUser()))
 
-    private fun articlesView(articles: List<Article>) = mapOf("articles" to articles)
+    private fun articlesView(articles: List<Article>) =
+        mapOf(
+            "articles" to articles.map { back.model.dto.Article.from(it, userService.currentUser()) },
+            "articleCount" to articles.size
+        )
 }

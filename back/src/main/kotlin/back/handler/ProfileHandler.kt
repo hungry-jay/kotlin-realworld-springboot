@@ -1,7 +1,7 @@
 package back.handler
 
-import back.model.dto.Profile
 import back.model.User
+import back.model.dto.Profile
 import back.service.UserService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping

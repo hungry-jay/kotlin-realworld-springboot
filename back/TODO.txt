@@ -5,6 +5,6 @@
 2. error 부분 추가 예정
 
 3. article 정렬부분 구현 예정
-    3.1. 이 때 inout도 고려, specification 추가.
+    3.1. 이 때 inout도 고려 - DONE, specification 추가.
 
 4. Test code

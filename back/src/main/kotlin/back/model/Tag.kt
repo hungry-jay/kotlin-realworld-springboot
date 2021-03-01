@@ -5,5 +5,4 @@ import javax.persistence.Entity
 @Entity
 data class Tag(
     val body: String
-    ) {
-}
+)
