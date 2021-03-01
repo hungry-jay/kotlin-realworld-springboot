@@ -1,5 +1,9 @@
-package back.model
+package back.model.dto
 
+import back.model.User
+import com.fasterxml.jackson.annotation.JsonRootName
+
+@JsonRootName("profile")
 data class Profile(
     val username: String,
     val bio: String,
